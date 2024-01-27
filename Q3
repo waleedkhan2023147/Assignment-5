@@ -1,0 +1,34 @@
+"""
+Attribute Validation Metaclass: Design a metaclass that performs custom validation
+on attributes declared during class creation.
+"""
+
+class AttributeValidationMeta(type):
+    def __new__(cls, name, bases, dct):
+        # Custom attribute validation logic
+        for attribute_name, attribute_value in dct.items():
+            if isinstance(attribute_value, int):
+                # Perform custom validation for integer attributes
+                if attribute_value < 0:
+                    raise ValueError(f"Attribute '{attribute_name}' must be a non-negative integer.")
+            elif isinstance(attribute_value, str):
+                # Perform custom validation for string attributes
+                if len(attribute_value) < 3:
+                    raise ValueError(f"Attribute '{attribute_name}' must have a length of at least 3.")
+        
+        # Create the class using the default type.__new__
+        return super().__new__(cls, name, bases, dct)
+
+# Use the metaclass in the class declaration
+class MyClass(metaclass=AttributeValidationMeta):
+    # Attributes with custom validation
+    positive_integer = 42
+    string_attribute = "abc"
+
+    # This will raise a ValueError because 'negative_integer' is a negative integer
+    negative_integer = -5
+
+    # This will raise a ValueError because 'short_string' has a length less than 3
+    short_string = "ab"
+
+# The class definition will be rejected if the validation fails
