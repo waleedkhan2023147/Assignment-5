@@ -1,0 +1,33 @@
+"""
+Metaclass for Multiple Inheritance: Create a metaclass that manages complex
+inheritance structures and enforces specific rules or restrictions on inheriting
+multiple parent classes.
+"""
+
+class InheritanceLimitMeta(type):
+    MAX_PARENT_CLASSES = 3
+
+    def __new__(cls, name, bases, dct):
+        # Check the number of parent classes
+        if len(bases) > cls.MAX_PARENT_CLASSES:
+            raise TypeError(f"Class '{name}' cannot inherit from more than {cls.MAX_PARENT_CLASSES} parent classes.")
+
+        # Create the class using the default type.__new__
+        return super().__new__(cls, name, bases, dct)
+
+# Use the metaclass in the class declaration
+class MyClass1:
+    pass
+
+class MyClass2:
+    pass
+
+class MyClass3:
+    pass
+
+class ComplexInheritanceClass(metaclass=InheritanceLimitMeta):
+    pass
+
+# This will raise a TypeError because ComplexInheritanceClass inherits from 4 parent classes
+class InvalidInheritanceClass(MyClass1, MyClass2, MyClass3, ComplexInheritanceClass):
+    pass
