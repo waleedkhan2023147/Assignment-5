@@ -1,0 +1,27 @@
+"""
+Logging Metaclass: Create a metaclass that automatically logs the creation
+and initialization of all classes it defines.
+"""
+
+class LoggingMeta(type):
+    def __new__(cls, name, bases, dct):
+        # Log class creation
+        print(f"Creating class: {name}")
+
+        # Create the class using the default type.__new__
+        return super().__new__(cls, name, bases, dct)
+
+    def __init__(cls, name, bases, dct):
+        # Log class initialization
+        print(f"Initializing class: {name}")
+
+        # Initialize the class using the default type.__init__
+        super().__init__(name, bases, dct)
+
+# Use the metaclass in the class declaration
+class LoggedClass(metaclass=LoggingMeta):
+    def __init__(self, value):
+        self.value = value
+
+# Example usage
+obj = LoggedClass(value=42)
