@@ -1,0 +1,26 @@
+"""
+Singleton Metaclass: Implement a metaclass that ensures only one instance
+of a class can be created.
+"""
+
+class SingletonMeta(type):
+    _instances = {}
+
+    def __call__(cls, *args, **kwargs):
+        # If an instance does not exist, create and store it
+        if cls not in cls._instances:
+            instance = super().__call__(*args, **kwargs)
+            cls._instances[cls] = instance
+        return cls._instances[cls]
+
+# Use the metaclass in the class declaration
+class SingletonClass(metaclass=SingletonMeta):
+    def __init__(self, value):
+        self.value = value
+
+# Example usage
+instance1 = SingletonClass(value=42)
+instance2 = SingletonClass(value=100)
+
+# Both instances point to the same object
+print(instance1 is instance2)  # Output: True
